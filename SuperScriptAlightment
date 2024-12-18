@@ -1,0 +1,33 @@
+import SwiftUI
+
+struct AlignedSuperscriptText: View {
+    let baseText: String
+    let superscript: String
+    let fontSize: CGFloat
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            Text(baseText)
+                .font(.system(size: fontSize))
+            
+            Text(superscript)
+                .font(.system(size: fontSize * 0.6))
+                .alignmentGuide(.top) { d in d[.top] }
+                .offset(x: baseTextWidth(baseText: baseText, fontSize: fontSize), y: 0)
+        }
+    }
+    
+    // Calculate the width of the base text to position the superscript correctly
+    private func baseTextWidth(baseText: String, fontSize: CGFloat) -> CGFloat {
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize)]
+        let size = (baseText as NSString).size(withAttributes: attributes)
+        return size.width
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        AlignedSuperscriptText(baseText: "H", superscript: "2", fontSize: 36)
+            .padding()
+    }
+}
